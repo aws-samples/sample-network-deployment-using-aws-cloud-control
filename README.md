@@ -1,4 +1,6 @@
-# aws-cloud-control-network-deployment
+# sample-network-deployment-using-aws-cloud-control
+
+# Streamlining Network Deployment using AWS Cloud Control
 
 ## Overview
 This repository provides a comprehensive solution for deploying a multi-account, multi-region AWS network infrastructure. It uses the AWS **Cloud Control API**, **DynamoDB**, and **CodePipeline** to deploy and manage resources in a centralized and automated manner.
