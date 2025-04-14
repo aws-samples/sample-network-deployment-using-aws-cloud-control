@@ -1,0 +1,27 @@
+firewalls:
+  - account_id: "887507431954"
+    region: "us-east-1"
+    name: "CC-NetworkFirewall-East"
+    vpc_name: "CC-Inspection-VPC-East"
+    subnet_name: "CC-Inspection-Subnet-East"
+    firewall_policies:
+      name: "CC-FirewallPolicy-East"
+      stateless_default_actions:
+        - "aws:forward_to_sfe"
+      stateless_fragment_default_actions:
+        - "aws:forward_to_sfe"
+      description: "Firewall policy for East region"
+
+  - account_id: "887507431954"
+    region: "us-west-2"
+    name: "CC-NetworkFirewall-West"
+    vpc_name: "CC-Inspection-VPC-West"
+    subnet_name: "CC-Inspection-Subnet-West"
+    firewall_policies:
+      name: "CC-FirewallPolicy-West"
+      stateless_default_actions:
+        - "aws:forward_to_sfe"
+      stateless_fragment_default_actions:
+        - "aws:forward_to_sfe"
+      description: "Firewall policy for West region"
+

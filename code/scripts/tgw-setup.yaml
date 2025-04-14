@@ -1,0 +1,205 @@
+##################################################
+#         Network Account Resources              #
+##################################################
+### Creating Inspection VPC in us-east-1 and us-west-2
+vpcs:
+  # VPCs across multiple accounts and regions
+  - account_id: "887507431954"
+    region: "us-east-1"
+    cidr_block: "10.4.0.0/16"
+    name: "CC-Inspection-VPC-East"
+    subnets:
+      - name: "CC-Inspection-Subnet-East"
+        cidr_block: "10.4.1.0/24"
+        availability_zone: "us-east-1a"
+        route_table:
+          name: "CC-Inspection-Subnet-East-RT"
+      - name: "CC-TGW-Subnet-East"
+        cidr_block: "10.4.2.0/24"
+        availability_zone: "us-east-1a"
+        route_table:
+          name: "CC-TGW-Subnet-East-RT"
+  
+  - account_id: "887507431954"
+    region: "us-west-2"
+    cidr_block: "10.5.0.0/16"
+    name: "CC-Inspection-VPC-West"
+    subnets:
+      - name: "CC-Inspection-Subnet-West"
+        cidr_block: "10.5.1.0/24"
+        availability_zone: "us-west-2a"
+        route_table:
+          name: "CC-Inspection-Subnet-West-RT"
+      - name: "CC-TGW-Subnet-West"
+        cidr_block: "10.5.2.0/24"
+        availability_zone: "us-west-2a"
+        route_table:
+          name: "CC-TGW-Subnet-West-RT"
+
+## Creating TGW attachment to the Inspection VPC in us-east-1 and us-west-2
+tgw_attachments:
+  # TGW Attachments for VPCs
+  - account_id: "887507431954"
+    region: "us-east-1"
+    tgw_name: "CC-CentralizedTGW-East"
+    vpc_name: "CC-Inspection-VPC-East"
+    subnets:
+      - "CC-TGW-Subnet-East"
+    name: "CC-Inspection-TGWAttachment-East"
+  
+  - account_id: "887507431954"
+    region: "us-west-2"
+    tgw_name: "CC-CentralizedTGW-West"
+    vpc_name: "CC-Inspection-VPC-West"
+    subnets:
+      - "CC-TGW-Subnet-West"
+    name: "CC-Inspection-TGWAttachment-West"
+
+## Route table routes for the Inpsection VPC's subnet (TGW subnet and Inspection Subnet)
+inspection_vpc_routes:
+  - account_id: "887507431954"
+    region: "us-east-1"
+    route_table_name: "CC-TGW-Subnet-East-RT"
+    destination_cidr_block: "0.0.0.0/0"
+    target_type: "FirewallEndpoint"
+    target_name: "CC-NetworkFirewall-East"
+  
+  - account_id: "887507431954"
+    region: "us-east-1"
+    route_table_name: "CC-Inspection-Subnet-East-RT"
+    destination_cidr_block: "0.0.0.0/0"
+    target_type: "TGW"
+    target_name: "CC-CentralizedTGW-East"
+  
+  - account_id: "887507431954"
+    region: "us-west-2"
+    route_table_name: "CC-TGW-Subnet-West-RT"
+    destination_cidr_block: "0.0.0.0/0"
+    target_type: "FirewallEndpoint"
+    target_name: "CC-NetworkFirewall-West"
+  
+  - account_id: "887507431954"
+    region: "us-west-2"
+    route_table_name: "CC-Inspection-Subnet-West-RT"
+    destination_cidr_block: "0.0.0.0/0"
+    target_type: "TGW"
+    target_name: "CC-CentralizedTGW-West"
+
+### Creating TGW attachment association, Route propogation and static routes to the TGW attachment route tables
+tgw_attachment_associations:
+  - account_id: "887507431954"
+    tgw_name: "CC-CentralizedTGW-East"
+    tgw_route_table_name: "Workload1-TGW-Attachment-East-RT"
+    region: "us-east-1"
+    associated_attachment:
+      - "Workload1-TGW-Attachment-East"
+    routes:
+      - destination_cidr_block: "0.0.0.0/0"
+        target_attachment_name: "CC-Inspection-TGWAttachment-East"
+  
+  - account_id: "887507431954"
+    tgw_name: "CC-CentralizedTGW-East"
+    tgw_route_table_name: "Workload2-TGW-Attachment-East-RT"
+    region: "us-east-1"
+    associated_attachment:
+      - "Workload2-TGW-Attachment-East"
+    routes:
+      - destination_cidr_block: "0.0.0.0/0"
+        target_attachment_name: "CC-Inspection-TGWAttachment-East"
+  
+  - account_id: "887507431954"
+    tgw_name: "CC-CentralizedTGW-East"
+    tgw_route_table_name: "SharedServices-TGW-Attachment-East-RT"
+    associated_attachment:
+      - "SharedServices-TGW-Attachment-East"
+    region: "us-east-1"
+    routes:
+      - destination_cidr_block: "0.0.0.0/0"
+        target_attachment_name: "CC-Inspection-TGWAttachment-East"
+
+  - account_id: "887507431954"
+    tgw_name: "CC-CentralizedTGW-West"
+    tgw_route_table_name: "Workload1-TGW-Attachment-West-RT"
+    associated_attachment:
+      - "Workload1-TGW-Attachment-West"
+    region: "us-west-2"
+    routes:
+      - destination_cidr_block: "0.0.0.0/0"
+        target_attachment_name: "CC-Inspection-TGWAttachment-West"
+  
+  - account_id: "887507431954"
+    tgw_name: "CC-CentralizedTGW-West"
+    tgw_route_table_name: "Workload2-TGW-Attachment-West-RT"
+    associated_attachment:
+      - "Workload2-TGW-Attachment-West"
+    region: "us-west-2"
+    routes:
+      - destination_cidr_block: "0.0.0.0/0"
+        target_attachment_name: "CC-Inspection-TGWAttachment-West"
+  
+  - account_id: "887507431954"
+    tgw_name: "CC-CentralizedTGW-West"
+    tgw_route_table_name: "SharedServices-TGW-Attachment-West-RT"
+    associated_attachment:
+      - "SharedServices-TGW-Attachment-West"
+    region: "us-west-2"
+    routes:
+      - destination_cidr_block: "0.0.0.0/0"
+        target_attachment_name: "CC-Inspection-TGWAttachment-West"
+
+  - account_id: "887507431954"
+    tgw_name: "CC-CentralizedTGW-East"
+    tgw_route_table_name: "East-West-TGW-Peering-RT" #(Route table used for return traffic on the Peer attachment)
+    associated_attachment:
+      - "East-West-TGW-Peering"
+    region: "us-east-1"
+    routes:
+      - destination_cidr_block: "0.0.0.0/0"
+        target_attachment_name: "CC-Inspection-TGWAttachment-East"
+
+  - account_id: "887507431954"
+    tgw_name: "CC-CentralizedTGW-West"
+    tgw_route_table_name: "West-East-TGW-Peering-RT"
+    associated_attachment:
+      - "East-West-TGW-Peering"
+    region: "us-west-2"
+    routes:
+      - destination_cidr_block: "0.0.0.0/0"
+        target_attachment_name: "CC-Inspection-TGWAttachment-West"
+    
+
+  - account_id: "887507431954"
+    tgw_name: "CC-CentralizedTGW-East"
+    tgw_route_table_name: "CC-Inspection-TGWAttachment-East-RT"
+    region: "us-east-1"
+    associated_attachment:
+      - "CC-Inspection-TGWAttachment-East"
+    propagated_attachments:
+      - "Workload1-TGW-Attachment-East"
+      - "Workload2-TGW-Attachment-East"
+      - "SharedServices-TGW-Attachment-East"
+    routes:
+      - destination_cidr_block: "10.1.0.0/16"  # Workload1 VPC-West
+        target_attachment_name: "East-West-TGW-Peering"
+      - destination_cidr_block: "10.3.0.0/16"  # Workload2 VPC-West
+        target_attachment_name: "East-West-TGW-Peering"
+      - destination_cidr_block: "10.7.0.0/16"  # Shared-Services VPC-West
+        target_attachment_name: "East-West-TGW-Peering"
+      
+  - account_id: "887507431954"
+    tgw_name: "CC-CentralizedTGW-West"
+    tgw_route_table_name: "CC-Inspection-TGWAttachment-West-RT"
+    region: "us-west-2"
+    associated_attachment:
+      - "CC-Inspection-TGWAttachment-West"
+    propagated_attachments:
+      - "Workload1-TGW-Attachment-West"
+      - "Workload2-TGW-Attachment-West"
+      - "SharedServices-TGW-Attachment-West"
+    routes:
+      - destination_cidr_block: "10.0.0.0/16"  # Workload1 VPC-East
+        target_attachment_name: "East-West-TGW-Peering"
+      - destination_cidr_block: "10.2.0.0/16"  # Workload2 VPC-East
+        target_attachment_name: "East-West-TGW-Peering"
+      - destination_cidr_block: "10.6.0.0/16"  # Shared-Services VPC-East
+        target_attachment_name: "East-West-TGW-Peering"

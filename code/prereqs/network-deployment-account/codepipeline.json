@@ -1,0 +1,64 @@
+{
+  "Name": "MultiAccountDeploymentPipeline",
+  "RoleArn": "arn:aws:iam::<deployment-account-id>:role/CodePipelineRole",
+  "ArtifactStore": {
+    "Type": "S3",
+    "Location": "<YourS3BucketName>"
+  },
+  "Stages": [
+    {
+      "Name": "Source",
+      "Actions": [
+        {
+          "Name": "SourceAction",
+          "ActionTypeId": {
+            "Category": "Source",
+            "Owner": "ThirdParty",
+            "Provider": "GitHub",
+            "Version": "1"
+          },
+          "Configuration": {
+            "Owner": "<GitHubOwner>",
+            "Repo": "<RepositoryName>",
+            "Branch": "main",
+            "OAuthToken": "<GitHubOAuthToken>"
+          },
+          "OutputArtifacts": [
+            {
+              "Name": "SourceOutput"
+            }
+          ],
+          "RunOrder": 1
+        }
+      ]
+    },
+    {
+      "Name": "Build",
+      "Actions": [
+        {
+          "Name": "BuildAction",
+          "ActionTypeId": {
+            "Category": "Build",
+            "Owner": "AWS",
+            "Provider": "CodeBuild",
+            "Version": "1"
+          },
+          "Configuration": {
+            "ProjectName": "MultiAccountBuildProject"
+          },
+          "InputArtifacts": [
+            {
+              "Name": "SourceOutput"
+            }
+          ],
+          "OutputArtifacts": [
+            {
+              "Name": "BuildOutput"
+            }
+          ],
+          "RunOrder": 1
+        }
+      ]
+    }
+  ]
+}

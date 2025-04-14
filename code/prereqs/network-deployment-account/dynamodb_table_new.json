@@ -1,0 +1,26 @@
+{
+  "TableName": "CloudControlResourceState",
+  "AttributeDefinitions": [
+    {"AttributeName": "ResourceId", "AttributeType": "S"},
+    {"AttributeName": "AccountId", "AttributeType": "S"},
+    {"AttributeName": "ResourceName", "AttributeType": "S"},
+    {"AttributeName": "ResourceType", "AttributeType": "S"}
+  ],
+  "KeySchema": [
+    {"AttributeName": "ResourceId", "KeyType": "HASH"},
+    {"AttributeName": "AccountId", "KeyType": "RANGE"}
+  ],
+  "GlobalSecondaryIndexes": [
+    {
+      "IndexName": "ResourceNameIndex",
+      "KeySchema": [
+        {"AttributeName": "ResourceName", "KeyType": "HASH"},
+        {"AttributeName": "ResourceType", "KeyType": "RANGE"}
+      ],
+      "Projection": {
+        "ProjectionType": "ALL"
+      }
+    }
+  ],
+  "BillingMode": "PAY_PER_REQUEST"
+}

@@ -1,0 +1,7 @@
+tgw_peering:
+  - region1: "us-east-1"
+    region2: "us-west-2"
+    tgw_name1: "CC-CentralizedTGW-East"
+    tgw_name2: "CC-CentralizedTGW-West"
+    peer_account_id: "887507431954"
+    peering_name: "East-West-TGW-Peering"

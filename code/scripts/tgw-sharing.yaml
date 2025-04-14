@@ -1,0 +1,10 @@
+tgw_share:
+  - account_id: "887507431954"  # Networking Account ID
+    region: "us-east-1"                   # Region where TGW is deployed
+    tgw_name: "CC-CentralizedTGW-East"    # Name of the TGW to be shared
+    organization_arn: "arn:aws:organizations::685691622995:organization/o-xchy3dz367"
+  
+  - account_id: "887507431954"  # Networking Account ID
+    region: "us-west-2"                   # Region where TGW is deployed
+    tgw_name: "CC-CentralizedTGW-West"    # Name of the TGW to be shared
+    organization_arn: "arn:aws:organizations::685691622995:organization/o-xchy3dz367"

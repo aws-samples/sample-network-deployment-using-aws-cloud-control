@@ -1,0 +1,12 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: latest
+    commands:
+      - pip install boto3
+  build:
+    commands:
+      - cd code
+      - chmod +x scripts/cc-deployment-script.py
+      - python scripts/cc-deployment-script.py

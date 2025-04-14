@@ -1,0 +1,104 @@
+workload_vpcs:
+  # Workload VPCs in different accounts and regions
+  - account_id: "631783514298"
+    region: "us-east-1"
+    vpc_name: "Workload1-VPC-East"
+    cidr_block: "10.0.0.0/16"
+    subnets:
+      - name: "Workload1-Subnet-East"
+        subnet_cidr: "10.0.1.0/24"
+        availability_zone: "us-east-1a"
+        transit-gateway-attachment:
+          - tgw_name: "CC-CentralizedTGW-East"
+            attachment_name: "Workload1-TGW-Attachment-East"
+        route_table: 
+          name: "Workload1-Subnet-East-RT"
+          routes:
+            - destination_cidr_block: "0.0.0.0/0"
+              target: "CC-CentralizedTGW-East"
+
+  - account_id: "631783514298"
+    region: "us-west-2"
+    vpc_name: "Workload1-VPC-West"
+    cidr_block: "10.1.0.0/16"
+    subnets:
+      - name: "Workload1-Subnet-West"
+        subnet_cidr: "10.1.1.0/24"
+        availability_zone: "us-west-2a"
+        transit-gateway-attachment:
+          - tgw_name: "CC-CentralizedTGW-West"
+            attachment_name: "Workload1-TGW-Attachment-West"
+        route_table:
+          name: "Workload1-Subnet-West-RT"
+          routes:
+            - destination_cidr_block: "0.0.0.0/0"
+              target: "CC-CentralizedTGW-West"
+  
+  - account_id: "414223788007"
+    region: "us-east-1"
+    vpc_name: "Workload2-VPC-East"
+    cidr_block: "10.2.0.0/16"
+    subnets:
+      - name: "Workload2-Subnet-East"
+        subnet_cidr: "10.2.1.0/24"
+        availability_zone: "us-east-1a"
+        transit-gateway-attachment:
+          - tgw_name: "CC-CentralizedTGW-East"
+            attachment_name: "Workload2-TGW-Attachment-East"
+        route_table:
+          name: "Workload2-Subnet-East-RT"
+          routes:
+            - destination_cidr_block: "0.0.0.0/0"
+              target: "CC-CentralizedTGW-East"
+  
+  - account_id: "414223788007"
+    region: "us-west-2"
+    vpc_name: "Workload2-VPC-West"
+    cidr_block: "10.3.0.0/16"
+    subnets:
+      - name: "Workload2-Subnet-West"
+        subnet_cidr: "10.3.1.0/24"
+        availability_zone: "us-west-2a"
+        transit-gateway-attachment:
+          - tgw_name: "CC-CentralizedTGW-West"
+            attachment_name: "Workload2-TGW-Attachment-West"
+        route_table:
+          name: "Workload2-Subnet-West-RT"
+          routes:
+            - destination_cidr_block: "0.0.0.0/0"
+              target: "CC-CentralizedTGW-West"
+
+  # Shared Services Account (Logging account for now)
+  - account_id: "048349647142"
+    region: "us-east-1"
+    cidr_block: "10.6.0.0/16"
+    vpc_name: "SharedServices-VPC-East"
+    subnets:
+      - name: "SharedServices-Subnet-East"
+        subnet_cidr: "10.6.1.0/24"
+        availability_zone: "us-east-1a"
+        transit-gateway-attachment:
+          - tgw_name: "CC-CentralizedTGW-East"
+            attachment_name: "SharedServices-TGW-Attachment-East"
+        route_table:
+          name: "SharedServices-Subnet-East-RT"
+          routes:
+            - destination_cidr_block: "0.0.0.0/0"
+              target: "CC-CentralizedTGW-East"
+
+  - account_id: "048349647142"
+    region: "us-west-2"
+    cidr_block: "10.7.0.0/16"
+    vpc_name: "SharedServices-VPC-West"
+    subnets:
+      - name: "SharedServices-Subnet-West"
+        subnet_cidr: "10.7.1.0/24"
+        availability_zone: "us-west-2a"
+        transit-gateway-attachment:
+          - tgw_name: "CC-CentralizedTGW-West"
+            attachment_name: "SharedServices-TGW-Attachment-West"
+        route_table:
+          name: "SharedServices-Subnet-West-RT"
+          routes:
+            - destination_cidr_block: "0.0.0.0/0"
+              target: "CC-CentralizedTGW-West"
